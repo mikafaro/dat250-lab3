@@ -8,6 +8,7 @@
     footer{
         padding: 40px;
         text-align: center;
+        justify-self: bottom;
     }
     .copyright{
         color: #aaa;
