@@ -1,14 +1,44 @@
 <script>
-    import { createEventDispatcher } from "svelte";
     import Button from "../shared/Button.svelte";
-
-    let dispatch = createEventDispatcher();
 
     let fields = { question: '', option1: '', option2: ''}
 
     const submitHandler = () => {
-        let poll = {...fields, votes1: 0, votes2: 0, id:Math.random()}
-        dispatch('addPoll', poll);
+        let poll = {
+            "question": fields.question,
+            "options": [
+                {
+                    "caption": fields.option1,
+                    "presentationOrder": 1,
+                },
+                {
+                    "caption" : fields.option2,
+                    "presentationOrder": 2,
+                }
+            ]
+        }
+        submitPoll(poll);
+    }
+
+    async function submitPoll(poll) {
+        try {
+            const response = await fetch('http://localhost:8080/polls', {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(poll)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert("Poll created")
+            } else {
+                console.error("Could not create poll", response.statusText);
+                alert("Could not create poll");
+            }
+        } catch (error) {
+            console.error("Error creating poll", error);
+            alert("Could not create poll");
+        }
     }
 </script>
 
