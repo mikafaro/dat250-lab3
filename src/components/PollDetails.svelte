@@ -1,18 +1,45 @@
 <script>
-    import { createEventDispatcher } from "svelte";
     import Card from "../shared/Card.svelte";
 
     export let poll;
+    export let votes;
 
-    const dispatch = createEventDispatcher();
+    const voteURL = "http://localhost:8080/votes";
+
 
     // reative values
-    $: totalVotes = poll.votes1 + poll.votes2;
-    $: percent1 = Math.floor(100 / totalVotes * poll.votes1);
-    $: percent2 = Math.floor(100 / totalVotes * poll.votes2);
+    
+   // @ts-ignore
+   //  $: percent1 = Math.floor(100 / totalVotes * votes1);
+   const totalVotes = 0;
+   const percent1 = 0;
+   const percent2 = 0;
+   // @ts-ignore
+   //  $: percent2 = Math.floor(100 / totalVotes * votes2);
 
-    const handleVote = (option, id) => {
-        dispatch('vote', {option, id});
+    async function handleVote(opt, id) {
+        const vote = {
+            "pollId" : id,
+            "optId": opt,
+        }
+        try {
+            const response = await fetch(voteURL, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(vote)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert("Vote created")
+            } else {
+                console.error("Could not create vote", response.statusText);
+                alert("Could not create vote");
+            }
+        } catch (error) {
+            console.error("Error creating vote", error);
+            alert("Could not create vote");
+        }
     }
 </script>
 
@@ -20,11 +47,11 @@
     <div class="poll">
         <h3> {poll.question}</h3>
         <p>Total votes: { totalVotes }</p>
-        <div class="option" on:click={() => handleVote('option1', poll.id)}>
+        <div class="option" on:click={() => handleVote(1, poll.id)}>
             <div class="percent percent-1" style="width: {percent1}%"></div>
             <span>{ poll.option1 } ({ poll.votes1 })</span>
         </div>
-        <div class="option" on:click={() => handleVote('option2', poll.id)}>
+        <div class="option" on:click={() => handleVote(2, poll.id)}>
             <div class="percent percent-2" style="width: {percent2}%"></div>
             <span>{ poll.option2 } ({ poll.votes2 })</span>
         </div>

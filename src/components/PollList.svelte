@@ -1,12 +1,13 @@
 <script>
     import PollDetails from './PollDetails.svelte';
     export let polls = [];
+    export let votes = new Map();
 </script>
 
 <div class="poll-list">
     {#each polls as poll (poll.id)}
         <div>
-            <PollDetails {poll} on:vote />
+            <PollDetails {poll} {votes} />
         </div>
     {/each}
 </div>
