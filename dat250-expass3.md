@@ -16,5 +16,14 @@ This has been completed by using the @CrossOrigin annotation to the controller c
 
 ## Step 4
 
+In integrating the frontend and backend I noticed the issue with user management seeing as the previous
+assignment required user registration, and the votes and polls to be properties of this class, but this assignment makes
+no mention of users at all. In respect of time I decided to alter my backend to bypass the user class when doing http requests
+from the front-end. I have successfully set up the poll creation form component to send a post request to the back-end, and for the
+poll list to be updated reactively within a few seconds.
+
+When it came to the votes I have not yet been able to retrieve this information correctly from the backend, probably because I've been trying to jsonify a hashmap, which I imagine doesn't just automatically work, so this part requires some more effort later on.
+
 ## Step 5
 
+Step 5 not completed yet as I'd like to get the entire app working to a good standard first.
